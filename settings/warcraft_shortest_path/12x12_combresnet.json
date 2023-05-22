@@ -9,7 +9,7 @@
     },
     "model_dir": "results/warcraft_shortest_path_combresnet",
     "num_cpus": 4,
-    "num_epochs": 50,
+    "num_epochs": 30,
     "problem_type": "warcraft_shortest_path",
     "ray_params": {},
     "save_visualizations": false,

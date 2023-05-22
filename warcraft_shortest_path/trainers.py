@@ -84,6 +84,13 @@ class ShortestPathAbstractTrainer(ABC):
         iterator = self.train_iterator.get_epoch_iterator(batch_size=self.batch_size, number_of_epochs=1, device='cuda' if self.use_cuda else 'cpu', preload=self.preload_batch)
         for i, data in enumerate(iterator):
             input, true_path, true_weights = data["images"], data["labels"],  data["true_weights"]
+            # print(type(true_weights))
+            # print(true_weights.shape)
+            # print(true_weights)
+            
+            # print(type(true_path))
+            # print(true_path.shape)
+            # print(true_path)
 
             if i == 0:
                 self.log(data, train=True)
@@ -96,6 +103,10 @@ class ShortestPathAbstractTrainer(ABC):
             loss, accuracy, last_suggestion = self.forward_pass(input, true_path, train=True, i=i)
 
             suggested_path = last_suggestion["suggested_path"]
+            
+            # print(type(suggested_path))
+            # print(suggested_path.shape)
+            print(suggested_path)
 
             batch_metrics = metrics.compute_metrics(true_paths=true_path,
             suggested_paths=suggested_path, true_vertex_costs=true_weights)
@@ -150,8 +161,8 @@ class ShortestPathAbstractTrainer(ABC):
             )
 
             if self.use_cuda:
-                input = input.cuda(async=True)
-                true_path = true_path.cuda(async=True)
+                input = input.cuda()
+                true_path = true_path.cuda()
 
             loss, accuracy, last_suggestion = self.forward_pass(input, true_path, train=False, i=i)
             suggested_path = last_suggestion["suggested_path"]
@@ -228,7 +239,6 @@ class DijkstraOnFull(ShortestPathAbstractTrainer):
         super().__init__(**kwargs)
         self.l1_regconst = l1_regconst
         self.lambda_val = lambda_val
-        self.solver = ShortestPath(lambda_val=lambda_val, neighbourhood_fn=self.neighbourhood_fn)
         self.loss_fn = HammingLoss()
 
         print("META:", self.metadata)
@@ -246,7 +256,7 @@ class DijkstraOnFull(ShortestPathAbstractTrainer):
         if i == 0 and not train:
             print(output[0])
         assert len(weights.shape) == 3, f"{str(weights.shape)}"
-        shortest_paths = self.solver(weights)
+        shortest_paths = ShortestPath.apply(weights, self.lambda_val)
 
         loss = self.loss_fn(shortest_paths, true_shortest_paths)
 

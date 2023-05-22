@@ -1,0 +1,12 @@
+name: plan_proj
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.8
+  - pip
+  # - numpy
+  # - tensorboard
+  # - tensorboardX
+  - pytorch==1.11.0
+  - torchvision==0.12.0 

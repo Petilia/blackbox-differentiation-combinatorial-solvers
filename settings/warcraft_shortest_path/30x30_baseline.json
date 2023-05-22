@@ -1,13 +1,13 @@
 {
     "evaluate_every": 10,
     "loader_params": {
-        "data_dir": "data/warcraft_shortest_path/12x12",
+        "data_dir": "data/warcraft_shortest_path/30x30",
         "evaluate_with_extra": false,
         "normalize": true,
         "use_local_path": false,
         "use_test_set": true
     },
-    "model_dir": "results/warcraft_shortest_path_baseline",
+    "model_dir": "results/warcraft_shortest_path_baseline_30_30",
     "num_cpus": 1,
     "num_epochs": 30,
     "problem_type": "warcraft_shortest_path",
